@@ -1,5 +1,6 @@
 import DS from 'ember-data';
-import EmberObject from '@ember/object';
+import EmberObject, { computed, observer }  from '@ember/object';
+import mockAPI from '../models/mockapi';
 
 export default EmberObject.extend({
   selectedTriggerService : null,
@@ -15,5 +16,20 @@ export default EmberObject.extend({
   isValidTrigger : false,
   isValidAction : false,
 
-  showThisDropdown : false
+  showThisDropdown : false,
+  showThatDropdown : false,
+  showTriggerDropdown : false,
+  showActionDropdown : false,
+
+  selectedTriggerDidChange: observer('selectedTriggerService', function() {
+    var oThis = this;
+    mockAPI.get("/api/triggers", { trigger_service_id : this.get('selectedTriggerService').id }, function (newTriggers) {
+      var triggers = oThis.get("triggers");
+      triggers.clear();
+      for (var i = 0, len = newTriggers.length; i < len; i++) {
+        triggers.pushObject(newTriggers[i]);
+      }
+    });
+  })
+
 });

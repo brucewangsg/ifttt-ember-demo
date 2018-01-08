@@ -3,38 +3,22 @@
 
   <!-- THIS button -->
   <span class="btn-group">
-    <span class="btn dropdown-toggle {{if model.triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleThisDropdown" }}>
+    <span class="btn dropdown-toggle {{if model.triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleDropdown" "showThisDropdown" }}>
       THIS
       <span class="caret"></span>
     </span>
-    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown noSelectionText="No Trigger Service Available" onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "triggerServiceDropdownDidClose") }}
+    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown noSelectionText="No Trigger Service Available" onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "toggleDropdownDidClose" "showThisDropdown") }}
   </span>
 
   <span class="main-label then-word">THEN</span> 
 
   <!-- THAT button -->
   <span class="btn-group">
-    <span class="cc-that-button btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleThatDropdown" }}>
+    <span class="cc-that-button btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleDropdown" "showThatDropdown" }}>
       THAT
       <span class="caret"></span>
     </span>
-    <ul class="cc-that-selection cc-dropdown dropdown-menu" forcescroll="1">
-      <li class="cc-no-selection">
-        <div class="cc-item service-selection" serviceid="0" jsclass="choose-trigger">
-          <h3>No Action Available</h3>
-          <div>...</div>
-        </div>
-      </li> 
-      <li>
-        <div class="cc-item service-selection" serviceid="5" jsclass="choose-that">
-          <div class='indented-container'>
-            <img class='logo' width='48' height='48' src='/img/icon.email.svg'>
-            <h3>Email</h3>
-            <div>Respond to inbound emails for any smtp server.</div>
-          </div>
-        </div>
-      </li>      
-    </ul>
+    {{service-dropdown items=model.actionServices showDropdown=model.showThatDropdown noSelectionText="No Action Service Available" onItemSelected=(action "chooseActionService") dropdownDidClose=(action "toggleDropdownDidClose" "showThatDropdown") }}
   </span>
 </div>
 
@@ -48,12 +32,11 @@
         <span>Choose a trigger:</span>
 
         <span class="btn-group">
-          <span class="cc-choose-trigger-button btn dropdown-toggle" data-toggle="dropdown" jsclass="show-dropdown-selection">
+          <span class="cc-choose-trigger-button btn dropdown-toggle" data-toggle="dropdown" {{ action "toggleDropdown" "showTriggerDropdown" }}>
             Choose Trigger
             <span class="caret"></span>
           </span>
-          <ul class="cc-trigger-selection cc-dropdown dropdown-menu" forcescroll="1">
-          </ul>
+          {{service-dropdown items=model.triggers showDropdown=model.showTriggerDropdown noSelectionText="No Trigger Available" onItemSelected=(action "chooseTrigger") dropdownDidClose=(action "toggleDropdownDidClose" "showTriggerDropdown") }}
         </span>
       {{/if}}
 

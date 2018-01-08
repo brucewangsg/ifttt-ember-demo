@@ -1,20 +1,29 @@
 import Controller from '@ember/controller';
-import mockAPI from '../models/mockapi';
 
 export default Controller.extend({
   actions : {
-    toggleThisDropdown() {
+    toggleDropdown(key) {
       var model = this.get('model'); 
-      model.set('showThisDropdown', true);
+      model.set(key, true);
     },
-    triggerServiceDropdownDidClose : function () {
+    toggleDropdownDidClose : function (key) {
       var model = this.get('model');
-      model.set('showThisDropdown', false);
+      model.set(key, false);
     },
     chooseTriggerService : function (item) {
       var model = this.get('model');
       model.set('selectedTriggerService', item);
       model.set('showThisDropdown', false);
+    },
+    chooseActionService : function (item) {
+      var model = this.get('model');
+      model.set('selectedActionService', item);
+      model.set('showThatDropdown', false);
+    },
+    chooseTrigger : function (item) {
+      var model = this.get('model');
+      model.set('selectedTrigger', item);
+      model.set('showTriggerDropdown', false);
     }
   }
 });

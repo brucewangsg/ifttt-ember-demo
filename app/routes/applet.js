@@ -6,6 +6,8 @@ var currentState = AppletState.create();
 
 export default Route.extend({
   model() {
+    // populating initial trigger services
+    //
     var triggerServices = currentState.get("triggerServices");
     if (triggerServices.length == 0) {
       mockAPI.get("/api/triggerServices", function (newTriggerServices) {
