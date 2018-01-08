@@ -7,7 +7,7 @@
       THIS
       <span class="caret"></span>
     </span>
-    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "triggerServiceDropdownDidClose") }}
+    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown noSelectionText="No Trigger Service Available" onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "triggerServiceDropdownDidClose") }}
   </span>
 
   <span class="main-label then-word">THEN</span> 

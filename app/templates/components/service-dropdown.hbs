@@ -1,5 +1,13 @@
 {{#if showDropdown}}
   <ul class="dropdown-menu on-show" forcescroll="1">
+    {{#unless items.length }}
+    <li class="cc-no-selection">
+      <div class="cc-item service-selection">
+        <h3>{{if noSelectionText noSelectionText "No Selection Available" }}</h3>
+        <div>...</div>
+      </div>
+    </li> 
+    {{/unless}}
     {{#each items as |listItem| }}
     <li {{ action "chooseItem" listItem }}>
       <div class="service-selection">
