@@ -3,19 +3,23 @@
 
   <!-- THIS button -->
   <span class="btn-group">
-    <span class="btn dropdown-toggle {{if triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleThisDropdown" }}>
+    <span class="btn dropdown-toggle {{if model.triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleThisDropdown" }}>
       THIS
       <span class="caret"></span>
     </span>
     {{#if model.showThisDropdown}}
     <ul class="dropdown-menu on-show" forcescroll="1">
-      <div class="cc-item service-selection" serviceid="5" jsclass="choose-that">
-        <div class='indented-container'>
-          <img class='logo' width='48' height='48' src='/img/icon.email.svg'>
-          <h3>Email</h3>
-          <div>Respond to inbound emails for any smtp server.</div>
+      {{#each model.triggerServices as |listItem| }}
+      <li>
+        <div class="service-selection" serviceid="{{ listItem.id }}">
+          <div class='indented-container'>
+            <img class='logo' width='48' height='48' src='{{ listItem.img }}'>
+            <h3>{{ listItem.title }}</h3>
+            <div>{{ listItem.description }}</div>
+          </div>
         </div>
-      </div>
+      </li>
+      {{/each}}
     </ul>
     {{/if}}
   </span>

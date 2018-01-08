@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import mockAPI from '../models/mockapi';
 
 export default Controller.extend({
   actions : {
