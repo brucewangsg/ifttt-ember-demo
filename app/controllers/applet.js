@@ -24,6 +24,11 @@ export default Controller.extend({
       $(document).bind('mousedown', cancelShow);
       $(document).bind('touchstart', cancelShow);
 
+    },
+    chooseItem : function (item) {
+      var model = this.get('model');
+      model.set('selectedTriggerService', item);
+      model.set('showThisDropdown', false);
     }
   }
 });

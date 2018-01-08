@@ -10,8 +10,8 @@
     {{#if model.showThisDropdown}}
     <ul class="dropdown-menu on-show" forcescroll="1">
       {{#each model.triggerServices as |listItem| }}
-      <li>
-        <div class="service-selection" serviceid="{{ listItem.id }}">
+      <li {{ action "chooseItem" listItem }}>
+        <div class="service-selection">
           <div class='indented-container'>
             <img class='logo' width='48' height='48' src='{{ listItem.img }}'>
             <h3>{{ listItem.title }}</h3>
@@ -51,3 +51,56 @@
     </ul>
   </span>
 </div>
+
+{{#if model.selectedTriggerService}}
+<div class="if-section container">
+  {{#if model.selectedTriggerService}}
+    <div class="container">
+      You have selected <strong>{{ model.selectedTriggerService.title }}</strong> service. 
+
+      {{#if model.selectedTriggerService }}
+        <span>Choose a trigger:</span>
+
+        <span class="btn-group">
+          <span class="cc-choose-trigger-button btn dropdown-toggle" data-toggle="dropdown" jsclass="show-dropdown-selection">
+            Choose Trigger
+            <span class="caret"></span>
+          </span>
+          <ul class="cc-trigger-selection cc-dropdown dropdown-menu" forcescroll="1">
+          </ul>
+        </span>
+      {{/if}}
+
+    </div>
+  {{/if}}
+
+  <div class="cc-trigger-selected cc-container container" style="display:none; margin-top : 20px">    
+    <div class='indented-container'>  
+      <span class="main-label if-sign">IF</span> New Feed is available:       
+      <span class="label label-warning clickable-label" jsclass="choose-another-trigger">or choose another trigger</span>
+    </div>
+
+    <div class='indented-container'>  
+      <form class="form-inline" jsclass="continue-choosing-trigger-form">
+        <div class="form-group">
+          <label for="exampleInputName2">Specify Feed URL:</label>
+          <input type='text' name='address' placeholder='http://www.wordpress.com/feed' jsclass='update-trigger-attributes auto-add-http validate-url'  autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off'/> 
+          <p class="cc-validation-message help-block warning" style="display:none">Make sure you have keyed in the correct URL.</p>
+          <button type="submit" style="display:none" jsclass="continue-choosing-trigger" class="cc-continue-button btn btn-default">Continue</button>
+        </div>
+      </form>
+    </div>    
+
+  </div>
+
+  <div class="cc-trigger-no-implementation container" style="display : none; margin-top : 20px; padding-left : 20px">
+    Ooops, this trigger has yet to be implemented ... <span class="label label-warning clickable-label" jsclass="choose-another-trigger">or choose another trigger</span>
+  </div>
+
+  <div class="cc-trigger-summary container" style="display:none; margin-top : 20px">
+    <div class='indented-container'>  
+      <span class="main-label if-sign">IF</span> a new feed is available at <span class='cc-feed-address'></span> <span class="cc-edit-trigger label label-warning clickable-label" jsclass="edit-trigger">edit trigger</span>
+    </div>
+  </div>
+</div>
+{{/if}}
