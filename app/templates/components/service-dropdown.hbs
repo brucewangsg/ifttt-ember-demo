@@ -1,0 +1,17 @@
+{{#if showDropdown}}
+  <ul class="dropdown-menu on-show" forcescroll="1">
+    {{#each items as |listItem| }}
+    <li {{ action "chooseItem" listItem }}>
+      <div class="service-selection">
+        <div class='{{if listItem.img 'indented-container' ''}}'>
+          {{#if listItem.img }}
+          <img class='logo' width='48' height='48' src='{{ listItem.img }}'>
+          {{/if}}
+          <h3>{{ listItem.title }}</h3>
+          <div>{{ listItem.description }}</div>
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+{{/if}}

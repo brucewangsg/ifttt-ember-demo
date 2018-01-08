@@ -7,21 +7,7 @@
       THIS
       <span class="caret"></span>
     </span>
-    {{#if model.showThisDropdown}}
-    <ul class="dropdown-menu on-show" forcescroll="1">
-      {{#each model.triggerServices as |listItem| }}
-      <li {{ action "chooseItem" listItem }}>
-        <div class="service-selection">
-          <div class='indented-container'>
-            <img class='logo' width='48' height='48' src='{{ listItem.img }}'>
-            <h3>{{ listItem.title }}</h3>
-            <div>{{ listItem.description }}</div>
-          </div>
-        </div>
-      </li>
-      {{/each}}
-    </ul>
-    {{/if}}
+    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "triggerServiceDropdownDidClose") }}
   </span>
 
   <span class="main-label then-word">THEN</span> 

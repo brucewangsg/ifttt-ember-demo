@@ -79,6 +79,7 @@ html, body {
 .dropdown-menu .service-selection div {
   width : 100%;
   white-space : normal;
+  font-size: 14px;
   -webkit-box-sizing : border-box;
   box-sizing : border-box;
 }

@@ -6,26 +6,12 @@ export default Controller.extend({
     toggleThisDropdown() {
       var model = this.get('model'); 
       model.set('showThisDropdown', true);
-
-      // hide popup when click happens on document
-      var cancelShow = (function (model) {
-        return function (ev) {
-          if ($(ev.target).parents('.dropdown-menu:first')[0]) {
-            return;        
-          }
-          $(document).unbind('mousedown', cancelShow);
-          $(document).unbind('touchstart', cancelShow);
-
-          // set flag to false to hide it
-          model.set('showThisDropdown', false);
-        };
-      })(model);
-
-      $(document).bind('mousedown', cancelShow);
-      $(document).bind('touchstart', cancelShow);
-
     },
-    chooseItem : function (item) {
+    triggerServiceDropdownDidClose : function () {
+      var model = this.get('model');
+      model.set('showThisDropdown', false);
+    },
+    chooseTriggerService : function (item) {
       var model = this.get('model');
       model.set('selectedTriggerService', item);
       model.set('showThisDropdown', false);
