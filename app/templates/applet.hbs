@@ -1,75 +1,193 @@
-<div class="cc-header-question container header-container">
-  <span class="main-label if-word">IF</span> 
+{{#unless model.isAllDone}}
 
-  <!-- THIS button -->
-  <span class="btn-group">
-    <span class="btn dropdown-toggle {{if model.triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleDropdown" "showThisDropdown" }}>
-      THIS
-      <span class="caret"></span>
+  <div class="container header-container">
+    <span class="main-label if-word">IF</span> 
+
+    <!-- THIS button -->
+    <span class="btn-group">
+      <span class="btn dropdown-toggle {{if model.triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleDropdown" "showThisDropdown" }}>
+        THIS
+        <span class="caret"></span>
+      </span>
+      {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown noSelectionText="No Trigger Service Available" onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "toggleDropdownDidClose" "showThisDropdown") }}
     </span>
-    {{service-dropdown items=model.triggerServices showDropdown=model.showThisDropdown noSelectionText="No Trigger Service Available" onItemSelected=(action "chooseTriggerService") dropdownDidClose=(action "toggleDropdownDidClose" "showThisDropdown") }}
-  </span>
 
-  <span class="main-label then-word">THEN</span> 
+    <span class="main-label then-word">THEN</span> 
 
-  <!-- THAT button -->
-  <span class="btn-group">
-    <span class="cc-that-button btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleDropdown" "showThatDropdown" }}>
-      THAT
-      <span class="caret"></span>
+    <!-- THAT button -->
+    <span class="btn-group">
+      <span class="btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleDropdown" "showThatDropdown" }}>
+        THAT
+        <span class="caret"></span>
+      </span>
+      {{service-dropdown items=model.actionServices showDropdown=model.showThatDropdown noSelectionText="No Action Service Available" onItemSelected=(action "chooseActionService") dropdownDidClose=(action "toggleDropdownDidClose" "showThatDropdown") }}
     </span>
-    {{service-dropdown items=model.actionServices showDropdown=model.showThatDropdown noSelectionText="No Action Service Available" onItemSelected=(action "chooseActionService") dropdownDidClose=(action "toggleDropdownDidClose" "showThatDropdown") }}
-  </span>
-</div>
+  </div>
 
-{{#if model.selectedTriggerService}}
-<div class="if-section container">
+{{/unless}}
+
+{{#unless model.isAllDone}}
+
   {{#if model.selectedTriggerService}}
-    <div class="container">
-      You have selected <strong>{{ model.selectedTriggerService.title }}</strong> service. 
+  <div class="if-section container">
+    {{#if model.selectedTriggerService}}
+      <div class="container">
+        You have selected <strong>{{ model.selectedTriggerService.title }}</strong> service. 
 
-      {{#if model.selectedTriggerService }}
-        <span>Choose a trigger:</span>
+        {{#if model.selectedTriggerService }}
+          <span>Choose a trigger:</span>
+
+          <span class="btn-group">
+            <span class="btn dropdown-toggle" data-toggle="dropdown" {{ action "toggleDropdown" "showTriggerDropdown" }}>
+              Choose Trigger
+              <span class="caret"></span>
+            </span>
+            {{service-dropdown items=model.triggers showDropdown=model.showTriggerDropdown noSelectionText="No Trigger Available" onItemSelected=(action "chooseTrigger") dropdownDidClose=(action "toggleDropdownDidClose" "showTriggerDropdown") }}
+          </span>
+        {{/if}}
+
+      </div>
+    {{/if}}
+
+    {{#if model.selectedTriggerAndEdit}}
+      {{#if model.selectedTriggerHasImplementation}}
+
+        {{if-equal params1=model.selectedTrigger.id params2=1}}
+          <div class="container" style="margin-top : 20px">    
+            <div class='indented-container'>  
+              <span class="main-label if-sign">IF</span> New Feed is available:       
+              <span class="label label-warning clickable-label" {{ action "toggleDropdown" "showTriggerDropdown" }}>or choose another trigger</span>
+            </div>
+
+            <div class='indented-container'>  
+              <form class="form-inline" jsclass="continue-choosing-trigger-form">
+                <div class="form-group">
+                  <label for="exampleInputName2">Specify Feed URL:</label>
+                  {{input type='text' name='address' placeholder='http://www.wordpress.com/feed' value=model.triggerAttributes.address autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-out=(action "setTriggerAttribute" "address")}} 
+                  {{#if model.wrongURL}}
+                    <p class="help-block warning">Make sure you have keyed in the correct URL.</p>
+                  {{/if}}
+                  {{#if model.isValidTrigger}}
+                    <button type="submit" class="btn btn-default" {{ action "continueSelectingAction" }}>Continue</button>
+                  {{/if}}
+                </div>
+              </form>
+            </div>    
+          </div>
+        {{if-equal}}
+
+      {{/if}}
+
+      {{#unless model.selectedTriggerHasImplementation}}
+        <div class="container" style="margin-top : 20px; padding-left : 20px">
+          Ooops, this trigger has yet to be implemented ... <span class="label label-warning clickable-label" {{ action "toggleDropdown" "showTriggerDropdown" }}>or choose another trigger</span>
+        </div>
+      {{/unless}}
+    {{/if}}
+
+    {{#if model.selectedTriggerAndDone}}
+      <div class="container" style="margin-top : 20px">
+        <div class='indented-container'>  
+          <span class="main-label if-sign">IF</span> a new feed is available at {{ model.triggerAttributes.address }} <span class="label label-warning clickable-label" {{ action "backToTriggerEditing" }}>edit trigger</span>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if model.shouldShowActionScene}}
+    <div class='then-section container'>
+      {{#unless model.selectedActionService}}
+      <div class="container">
+        <span class="main-label">THEN</span> <span class="label label-warning clickable-label" {{ action "toggleDropdown" "showThatDropdown" }}>choose a service</span>
+      </div>
+      {{/unless}}
+
+      {{#if model.selectedActionService}}
+      <div class="container">
+        You have selected <strong>{{model.selectedActionService.title}}</strong> service. <span>Choose an action:</span>
 
         <span class="btn-group">
-          <span class="cc-choose-trigger-button btn dropdown-toggle" data-toggle="dropdown" {{ action "toggleDropdown" "showTriggerDropdown" }}>
-            Choose Trigger
+          <span class="btn dropdown-toggle" data-toggle="dropdown" {{ action "toggleDropdown" "showActionDropdown" }}>
+            Choose Action
             <span class="caret"></span>
           </span>
-          {{service-dropdown items=model.triggers showDropdown=model.showTriggerDropdown noSelectionText="No Trigger Available" onItemSelected=(action "chooseTrigger") dropdownDidClose=(action "toggleDropdownDidClose" "showTriggerDropdown") }}
+          {{service-dropdown items=model.actions showDropdown=model.showActionDropdown noSelectionText="No Action Available" onItemSelected=(action "chooseAction") dropdownDidClose=(action "toggleDropdownDidClose" "showActionDropdown") }}
         </span>
+      </div>
+      {{/if}}
+
+      {{#if model.selectedActionAndEdit}}
+        {{#if model.selectedActionHasImplementation}}
+
+          {{if-equal params1=model.selectedAction.id params2=1}}
+
+            <div class="container" style="margin-top : 20px">
+              <div class='indented-container level-2'>  
+                <span class="main-label then-sign">THEN</span> Send email to: <span class="label label-warning clickable-label" {{ action "toggleDropdown" "showActionDropdown" }}>or choose another action</span>
+              </div>
+
+              <div class='indented-container level-2'>  
+                <form class="form-inline" jsclass="complete-form">
+                  <div class="form-group">
+                    <label for="exampleInputName2">Specify your email:</label>
+                    {{input type='text' name='email' placeholder='john.doe@email.com' value=model.actionAttributes.email autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-out=(action "setActionAttribute" "email")}} 
+                    {{#if model.wrongEmail}}
+                      <p class="help-block warning">Make sure you have keyed in the correct email.</p>
+                    {{/if}}
+                    {{#if model.isValidAction}}
+                      <button type="submit" class="btn btn-default" {{ action "finalizeAction" }}>Continue</button>
+                    {{/if}}
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          {{if-equal}}
+
+        {{/if}}
+
+        {{#unless model.selectedActionHasImplementation}}
+          <div class="container" style="margin-top : 20px; padding-left : 20px">
+            Ooops, this action has yet to be implemented ... <span class="label label-warning clickable-label" {{ action "toggleDropdown" "showActionDropdown" }}>or choose another action</span>
+          </div>
+        {{/unless}}
+
+      {{/if}}
+
+      {{#if model.selectedActionAndDone}}
+        <div class="container" style="margin-top : 20px">
+          <div class='indented-container level-2'>  
+            <span class="main-label then-sign">THEN</span> Send email to : {{ model.actionAttributes.email }} <span class="label label-warning clickable-label" {{ action "backToActionEditing" }}>edit action</span>
+          </div>
+        </div>
       {{/if}}
 
     </div>
   {{/if}}
 
-  <div class="cc-trigger-selected cc-container container" style="display:none; margin-top : 20px">    
-    <div class='indented-container'>  
-      <span class="main-label if-sign">IF</span> New Feed is available:       
-      <span class="label label-warning clickable-label" jsclass="choose-another-trigger">or choose another trigger</span>
+  {{#if model.readyToSubmit}}
+    <div class='container' style="text-align : center">
+      <span class="btn btn-default" {{ action "saveAndSubmit" }}>Save and Submit</span>    
     </div>
+  {{/if}}
 
-    <div class='indented-container'>  
-      <form class="form-inline" jsclass="continue-choosing-trigger-form">
-        <div class="form-group">
-          <label for="exampleInputName2">Specify Feed URL:</label>
-          <input type='text' name='address' placeholder='http://www.wordpress.com/feed' jsclass='update-trigger-attributes auto-add-http validate-url'  autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off'/> 
-          <p class="cc-validation-message help-block warning" style="display:none">Make sure you have keyed in the correct URL.</p>
-          <button type="submit" style="display:none" jsclass="continue-choosing-trigger" class="cc-continue-button btn btn-default">Continue</button>
-        </div>
-      </form>
-    </div>    
+{{/unless}}
 
-  </div>
-
-  <div class="cc-trigger-no-implementation container" style="display : none; margin-top : 20px; padding-left : 20px">
-    Ooops, this trigger has yet to be implemented ... <span class="label label-warning clickable-label" jsclass="choose-another-trigger">or choose another trigger</span>
-  </div>
-
-  <div class="cc-trigger-summary container" style="display:none; margin-top : 20px">
-    <div class='indented-container'>  
-      <span class="main-label if-sign">IF</span> a new feed is available at <span class='cc-feed-address'></span> <span class="cc-edit-trigger label label-warning clickable-label" jsclass="edit-trigger">edit trigger</span>
+{{#if model.isAllDone}}
+  <div class='if-section container finalized'>
+    <div class="container" style="margin-top : 20px">
+      <div class='indented-container'>  
+        <span class="main-label if-sign">IF</span> a new feed is available at {{ model.triggerAttributes.address }}
+      </div>
     </div>
   </div>
-</div>
+
+  <div class='then-section container finalized'>
+    <div class="container" style="margin-top : 20px">
+      <div class='indented-container level-2'>  
+        <span class="main-label then-sign">THEN</span> Send email to : {{ model.actionAttributes.email }}
+      </div>
+    </div>
+  </div>
 {{/if}}
