@@ -1,0 +1,49 @@
+<div class="cc-header-question container header-container">
+  <span class="main-label if-word">IF</span> 
+
+  <!-- THIS button -->
+  <span class="btn-group">
+    <span class="btn dropdown-toggle {{if triggerServices.length '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleThisDropdown" }}>
+      THIS
+      <span class="caret"></span>
+    </span>
+    {{#if model.showThisDropdown}}
+    <ul class="dropdown-menu on-show" forcescroll="1">
+      <div class="cc-item service-selection" serviceid="5" jsclass="choose-that">
+        <div class='indented-container'>
+          <img class='logo' width='48' height='48' src='/img/icon.email.svg'>
+          <h3>Email</h3>
+          <div>Respond to inbound emails for any smtp server.</div>
+        </div>
+      </div>
+    </ul>
+    {{/if}}
+  </span>
+
+  <span class="main-label then-word">THEN</span> 
+
+  <!-- THAT button -->
+  <span class="btn-group">
+    <span class="cc-that-button btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleThatDropdown" }}>
+      THAT
+      <span class="caret"></span>
+    </span>
+    <ul class="cc-that-selection cc-dropdown dropdown-menu" forcescroll="1">
+      <li class="cc-no-selection">
+        <div class="cc-item service-selection" serviceid="0" jsclass="choose-trigger">
+          <h3>No Action Available</h3>
+          <div>...</div>
+        </div>
+      </li> 
+      <li>
+        <div class="cc-item service-selection" serviceid="5" jsclass="choose-that">
+          <div class='indented-container'>
+            <img class='logo' width='48' height='48' src='/img/icon.email.svg'>
+            <h3>Email</h3>
+            <div>Respond to inbound emails for any smtp server.</div>
+          </div>
+        </div>
+      </li>      
+    </ul>
+  </span>
+</div>
