@@ -16,7 +16,7 @@
 
     <!-- THAT button -->
     <span class="btn-group">
-      <span class="btn dropdown-toggle disabled" data-toggle="dropdown" {{ action "toggleDropdown" "showThatDropdown" }}>
+      <span class="btn dropdown-toggle {{if model.isTriggerSceneDone '' 'disabled'}}" data-toggle="dropdown" {{ action "toggleDropdown" "showThatDropdown" }}>
         THAT
         <span class="caret"></span>
       </span>
