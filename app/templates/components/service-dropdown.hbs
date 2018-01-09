@@ -8,7 +8,12 @@
       </div>
     </li> 
     {{/unless}}
-    {{#each items as |listItem| }}
+    {{#if items.length }}
+      <li class='search'>
+        {{input type='text' class='search-field' name='keyword' placeholder='Search by keyword' value=keyword autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off'}} 
+      </li>
+    {{/if}}
+    {{#each filteredItems as |listItem| }}
     <li {{ action "chooseItem" listItem }}>
       <div class="service-selection">
         <div class='{{if listItem.img 'indented-container' ''}}'>

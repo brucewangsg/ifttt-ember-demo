@@ -1,9 +1,38 @@
 import Component from '@ember/component';
-import EmberObject, { computed, observer }  from '@ember/object';
+import { computed, observer }  from '@ember/object';
+
+/*
+    Usage
+    {{service-dropdown 
+      items=passYourItems 
+      showDropdown=flagToToggleDropdown 
+      noSelectionText="No Item Available ..." 
+      onItemSelected=(action "chooseTriggerService") 
+      dropdownDidClose=(action "callbackForDropdownDidClose")
+      dropdownDidClose=(action "callbackForDropdownDidClose") 
+    }}
+
+
+*/
 
 export default Component.extend({
   showDropdown : null,
   _cancelDropdownFunc : null,
+  keyword : null,
+  filteredItems : computed('keyword', 'items.[]', function () {
+    var items = this.get('items');
+    var keyword = this.get('keyword');
+    var filterFunc = function (item) {
+      if (keyword && keyword.length > 0) {
+        return (item.title+'').toLowerCase().match(keyword);
+      }
+      return true;
+    };
+    if (this.get("filter")) {
+      filterFunc = this.get("filter");
+    }
+    return items.filter(filterFunc);
+  }),
 
   // listen to change for showDropdown state
   showThisDropdownDidChange : observer('showDropdown', function() {
@@ -19,9 +48,9 @@ export default Component.extend({
       // when it changed to close, hook an event to close dropdown when document get clicked
       // hide popup when click happens on document
 
-      var dropdownMenu = $(this.get('element'));
+      var dropdownMenu = this.$(this.get('element'));
       var originalParent = dropdownMenu.parent();
-      if ($(window).width() <= 480) { // on mobile
+      if (this.$(window).width() <= 480) { // on mobile
         dropdownMenu.appendTo(document.body);
       } 
 
@@ -29,13 +58,13 @@ export default Component.extend({
       this._cancelDropdownFunc = (function (oThis) {
         return function (ev) {
           if (ev) {
-            if ($(ev.target).parents('.dropdown-menu:first')[0]) {
+            if (oThis.$(ev.target).parents('.dropdown-menu:first')[0]) {
               return;        
             }
           }
 
-          $(document).unbind('mousedown', oThis._cancelDropdownFunc);
-          $(document).unbind('touchstart', oThis._cancelDropdownFunc);
+          oThis.$(document).unbind('mousedown', oThis._cancelDropdownFunc);
+          oThis.$(document).unbind('touchstart', oThis._cancelDropdownFunc);
 
           // set flag to false to hide it
           oThis.set('showDropdown', false);
@@ -43,8 +72,8 @@ export default Component.extend({
         };
       })(this);
 
-      $(document).bind('mousedown', this._cancelDropdownFunc);
-      $(document).bind('touchstart', this._cancelDropdownFunc);      
+      this.$(document).bind('mousedown', this._cancelDropdownFunc);
+      this.$(document).bind('touchstart', this._cancelDropdownFunc);      
     }
   }),
 
