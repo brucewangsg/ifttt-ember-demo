@@ -1,7 +1,6 @@
-# ifttt-ember
+# IFTTT Applet Selector Demo
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This is another attempt to create a IFTTT applet. On this demo we are using emberjs to do that. The last attempt was done in simple [jQuery app](https://github.com/brucewangsg/ifttt-jquery-demo).
 
 ## Prerequisites
 
