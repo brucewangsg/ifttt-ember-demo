@@ -14,22 +14,43 @@ export default Controller.extend({
       var model = this.get('model');
       model.set('selectedTriggerService', item);
       model.set('showThisDropdown', false);
+
+      this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code);
     },
     chooseActionService : function (item) {
       var model = this.get('model');
       model.set('selectedActionService', item);
       model.set('showThatDropdown', false);
+
+      this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/' + model.selectedActionService.code);
     },
     chooseTrigger : function (item) {
       var model = this.get('model');
       model.set('selectedTrigger', item);
       model.set('showTriggerDropdown', false);
+
+      this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id);
     },
     chooseAction : function (item) {
       var model = this.get('model');
       model.set('selectedAction', item);
       model.set('showActionDropdown', false);
+
+      this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/' + model.selectedActionService.code + '/' + model.selectedAction.id);
     },
+    /*
+      done with trigger scene
+    */
+    continueSelectingAction : function () {
+      var model = this.get('model');
+      if (model.get('isValidTrigger')) {
+        model.set('isTriggerSceneDone', true);      
+      }
+    },
+    /*
+      allow modification of trigger parameters after we are done with trigger scene, 
+      sort of back to editing trigger scene
+    */
     backToTriggerEditing : function () {
       var model = this.get('model');
       model.set('isTriggerSceneDone', false);
@@ -38,10 +59,13 @@ export default Controller.extend({
       var model = this.get('model');
       model.set('isActionSceneDone', false);
     },
-    continueSelectingAction : function () {
+    /*
+      done with action scene
+    */
+    finalizeAction : function () {
       var model = this.get('model');
-      if (model.get('isValidTrigger')) {
-        model.set('isTriggerSceneDone', true);      
+      if (model.get('isValidAction')) {
+        model.set('isActionSceneDone', true);      
       }
     },
     setTriggerAttribute : function (key, value) {
@@ -51,12 +75,6 @@ export default Controller.extend({
 
       if (key == 'address') {
         model.verifyAddress();
-      }
-    },
-    finalizeAction : function () {
-      var model = this.get('model');
-      if (model.get('isValidAction')) {
-        model.set('isActionSceneDone', true);      
       }
     },
     setActionAttribute : function (key, value) {

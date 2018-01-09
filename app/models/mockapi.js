@@ -6,53 +6,63 @@ export default {
     
     if (path == "/api/triggerServices") {
       callback([{
+        id : 3,
+        title : "RSS Feed",
+        code : 'rss',
+        img : "/img/icon.rss.svg",
+        description : "This service deal with Really Simple Syndicate."
+      }, {
         id : 1,
         title : "Twitter",
+        code : 'twitter',
         img : "/img/icon.twitter.svg",
         description : "Twitter Applets can help you manage and save tweets, keep an eye on #hashtags, and much more."
       }, {
         id : 2,
         title : "Date & Time",
+        code : 'date',
         img : "/img/icon.date.svg",
         description : "Find the best date and time for your scheduled task."
       }, {
-        id : 3,
-        title : "RSS Feed",
-        img : "/img/icon.rss.svg",
-        description : "This service deal with Really Simple Syndicate."
-      }, {
         id : 4,
         title : "SMS",
+        code : 'sms',
         img : "/img/icon.sms.svg",
         description : "Get important notifications on your phone via SMS."
       }, {
         id : 5,
         title : "Email",
+        code : 'email',
         img : "/img/icon.email.svg",
         description : "Respond to inbound emails for any smtp server."
       }, {
         id : 6,
         title : "Weather",
+        code : 'weather',
         img : "/img/icon.weather.svg",
         description : "Today's weather report."
       }, {
         id : 7,
         title : "Phone Call",
+        code : 'phone',
         img : "/img/icon.phone.svg",
         description : "This service can trigger Applets when you leave a voicemail at the IFTTT number."
       }, {
         id : 8,
         title : "Delicious",
+        code : 'delicious',
         img : "/img/icon.delicious.svg",
         description : "Delicious is a social bookmarking web service for storing, sharing, and discovering web bookmarks."
       }, {
         id : 9,
         title : "Facebook",
+        code : 'facebook',
         img : "/img/icon.facebook.svg",
         description : "Manage your profile, posting, photos and more with Facebook Applets that work with the world's largest social networking site."
       }, {
         id : 10,
         title : "Tumblr",
+        code : 'tumblr',
         img : "/img/icon.tumblr.svg",
         description : "Tumblr is a blogging platform that allows users to post text, images, videos, links, quotes, and audio."
       }]);
@@ -76,53 +86,63 @@ export default {
 
       if (data && data.trigger_service_id == 3) { // RSS
         callback([{
+          id : 5,
+          title : "Email",
+          code : 'email',
+          img : "/img/icon.email.svg",
+          description : "Respond to inbound emails for any smtp server."
+        }, {
           id : 1,
           title : "Twitter",
+          code : 'twitter',
           img : "/img/icon.twitter.svg",
           description : "Twitter Applets can help you manage and save tweets, keep an eye on #hashtags, and much more."
         }, {
           id : 2,
           title : "Date & Time",
+          code : 'date',
           img : "/img/icon.date.svg",
           description : "Find the best date and time for your scheduled task."
         }, {
           id : 3,
           title : "RSS Feed",
+          code : 'rss',
           img : "/img/icon.rss.svg",
           description : "This service deal with Really Simple Syndicate."
         }, {
           id : 4,
           title : "SMS",
+          code : 'sms',
           img : "/img/icon.sms.svg",
           description : "Get important notifications on your phone via SMS."
         }, {
-          id : 5,
-          title : "Email",
-          img : "/img/icon.email.svg",
-          description : "Respond to inbound emails for any smtp server."
-        }, {
           id : 6,
           title : "Weather",
+          code : 'weather',
           img : "/img/icon.weather.svg",
           description : "Today's weather report."
         }, {
           id : 7,
           title : "Phone Call",
+          code : 'phone',
           img : "/img/icon.phone.svg",
           description : "This service can trigger Applets when you leave a voicemail at the IFTTT number."
         }, {
           id : 8,
           title : "Delicious",
+          code : 'delicious',
           img : "/img/icon.delicious.svg",
           description : "Delicious is a social bookmarking web service for storing, sharing, and discovering web bookmarks."
         }, {
           id : 9,
           title : "Facebook",
+          code : 'facebook',
           img : "/img/icon.facebook.svg",
           description : "Manage your profile, posting, photos and more with Facebook Applets that work with the world's largest social networking site."
         }, {
           id : 10,
           title : "Tumblr",
+          code : 'tumblr',
           img : "/img/icon.tumblr.svg",
           description : "Tumblr is a blogging platform that allows users to post text, images, videos, links, quotes, and audio."
         }]);

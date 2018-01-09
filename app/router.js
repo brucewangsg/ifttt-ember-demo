@@ -7,7 +7,10 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('applet', { path : '/applet' });
+  this.route('applet', { path : '/if/:triggertype/:triggerid/:actiontype/:actionid' });
+  this.route('applet', { path : '/if/:triggertype/:triggerid/:actiontype' });
+  this.route('applet', { path : '/if/:triggertype/:triggerid' });
+  this.route('applet', { path : '/if/:triggertype' });
   this.route('applet', { path : '/' });
 });
 
