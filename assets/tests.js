@@ -17,12 +17,12 @@ define('ifttt-ember/tests/app.lint-test', [], function () {
 
   QUnit.test('components/service-dropdown.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/service-dropdown.js should pass ESLint\n\n2:8 - \'EmberObject\' is defined but never used. (no-unused-vars)\n2:23 - \'computed\' is defined but never used. (no-unused-vars)\n22:26 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n22:26 - \'$\' is not defined. (no-undef)\n24:11 - \'$\' is not defined. (no-undef)\n24:11 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n32:17 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n32:17 - \'$\' is not defined. (no-undef)\n37:11 - \'$\' is not defined. (no-undef)\n37:11 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n38:11 - \'$\' is not defined. (no-undef)\n38:11 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n46:7 - Do not use global `$` or `jQuery` (ember/no-global-jquery)\n46:7 - \'$\' is not defined. (no-undef)\n47:7 - \'$\' is not defined. (no-undef)\n47:7 - Do not use global `$` or `jQuery` (ember/no-global-jquery)');
+    assert.ok(true, 'components/service-dropdown.js should pass ESLint\n\n');
   });
 
   QUnit.test('controllers/applet.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/applet.js should pass ESLint\n\n91:17 - \'key\' is not defined. (no-undef)');
+    assert.ok(false, 'controllers/applet.js should pass ESLint\n\n107:17 - \'key\' is not defined. (no-undef)');
   });
 
   QUnit.test('models/applet-state.js', function (assert) {

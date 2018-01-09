@@ -41,6 +41,21 @@ define('ifttt-ember/components/service-dropdown', ['exports'], function (exports
   exports.default = Ember.Component.extend({
     showDropdown: null,
     _cancelDropdownFunc: null,
+    keyword: null,
+    filteredItems: Ember.computed('keyword', 'items.[]', function () {
+      var items = this.get('items');
+      var keyword = this.get('keyword');
+      var filterFunc = function filterFunc(item) {
+        if (keyword && keyword.length > 0) {
+          return (item.title + '').toLowerCase().match(keyword);
+        }
+        return true;
+      };
+      if (this.get("filter")) {
+        filterFunc = this.get("filter");
+      }
+      return items.filter(filterFunc);
+    }),
 
     // listen to change for showDropdown state
     showThisDropdownDidChange: Ember.observer('showDropdown', function () {
@@ -56,9 +71,9 @@ define('ifttt-ember/components/service-dropdown', ['exports'], function (exports
         // when it changed to close, hook an event to close dropdown when document get clicked
         // hide popup when click happens on document
 
-        var dropdownMenu = $(this.get('element'));
+        var dropdownMenu = this.$(this.get('element'));
         var originalParent = dropdownMenu.parent();
-        if ($(window).width() <= 480) {
+        if (this.$(window).width() <= 480) {
           // on mobile
           dropdownMenu.appendTo(document.body);
         }
@@ -67,13 +82,13 @@ define('ifttt-ember/components/service-dropdown', ['exports'], function (exports
         this._cancelDropdownFunc = function (oThis) {
           return function (ev) {
             if (ev) {
-              if ($(ev.target).parents('.dropdown-menu:first')[0]) {
+              if (oThis.$(ev.target).parents('.dropdown-menu:first')[0]) {
                 return;
               }
             }
 
-            $(document).unbind('mousedown', oThis._cancelDropdownFunc);
-            $(document).unbind('touchstart', oThis._cancelDropdownFunc);
+            oThis.$(document).unbind('mousedown', oThis._cancelDropdownFunc);
+            oThis.$(document).unbind('touchstart', oThis._cancelDropdownFunc);
 
             // set flag to false to hide it
             oThis.set('showDropdown', false);
@@ -81,8 +96,8 @@ define('ifttt-ember/components/service-dropdown', ['exports'], function (exports
           };
         }(this);
 
-        $(document).bind('mousedown', this._cancelDropdownFunc);
-        $(document).bind('touchstart', this._cancelDropdownFunc);
+        this.$(document).bind('mousedown', this._cancelDropdownFunc);
+        this.$(document).bind('touchstart', this._cancelDropdownFunc);
       }
     }),
 
@@ -117,34 +132,44 @@ define('ifttt-ember/controllers/applet', ['exports'], function (exports) {
   });
   exports.default = Ember.Controller.extend({
     actions: {
+      /* trigger the dropdown to open up, using data down pattern */
       toggleDropdown: function toggleDropdown(key) {
         var model = this.get('model');
         model.set(key, true);
       },
 
+      /* when a dropdownShow state get changed, update the flag so that our dropdown get notified. data down, action up */
       toggleDropdownDidClose: function toggleDropdownDidClose(key) {
         var model = this.get('model');
         model.set(key, false);
       },
+
+      /* callbacks from dropdown selector */
+
       chooseTriggerService: function chooseTriggerService(item) {
         var model = this.get('model');
         model.set('selectedTriggerService', item);
+        model.set('selectedTrigger', null);
         model.set('showThisDropdown', false);
 
+        // only apply push state when user has selected trigger service
         this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code);
       },
       chooseActionService: function chooseActionService(item) {
         var model = this.get('model');
         model.set('selectedActionService', item);
+        model.set('selectedAction', null);
         model.set('showThatDropdown', false);
 
-        this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/' + model.selectedActionService.code);
+        // only apply push state when user has selected a trigger
+        this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/then/' + model.selectedActionService.code);
       },
       chooseTrigger: function chooseTrigger(item) {
         var model = this.get('model');
         model.set('selectedTrigger', item);
         model.set('showTriggerDropdown', false);
 
+        // only apply push state when user has selected an action service
         this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id);
       },
       chooseAction: function chooseAction(item) {
@@ -152,8 +177,12 @@ define('ifttt-ember/controllers/applet', ['exports'], function (exports) {
         model.set('selectedAction', item);
         model.set('showActionDropdown', false);
 
-        this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/' + model.selectedActionService.code + '/' + model.selectedAction.id);
+        // only apply push state when user has selected an action
+        this.get('target').send('transitionTo', '/if/' + model.selectedTriggerService.code + '/' + model.selectedTrigger.id + '/then/' + model.selectedActionService.code + '/' + model.selectedAction.id);
       },
+
+      /* UI state flows */
+
       /*
         done with trigger scene
       */
@@ -202,10 +231,13 @@ define('ifttt-ember/controllers/applet', ['exports'], function (exports) {
           model.verifyEmail();
         }
       },
+
+      /* we can use document.activeElement, but for this exercise, we simply keep track the inputField focus state */
       setFocusFlag: function setFocusFlag() {
         var model = this.get('model');
         model.set(key + 'FocusIn', true);
       },
+
       saveAndSubmit: function saveAndSubmit() {
         var model = this.get('model');
         model.set('isAllDone', true);
@@ -757,8 +789,8 @@ define('ifttt-ember/router', ['exports', 'ifttt-ember/config/environment'], func
   });
 
   Router.map(function () {
-    this.route('applet', { path: '/if/:triggertype/:triggerid/:actiontype/:actionid' });
-    this.route('applet', { path: '/if/:triggertype/:triggerid/:actiontype' });
+    this.route('applet', { path: '/if/:triggertype/:triggerid/then/:actiontype/:actionid' });
+    this.route('applet', { path: '/if/:triggertype/:triggerid/then/:actiontype' });
     this.route('applet', { path: '/if/:triggertype/:triggerid' });
     this.route('applet', { path: '/if/:triggertype' });
     this.route('applet', { path: '/' });
@@ -944,7 +976,7 @@ define("ifttt-ember/templates/components/service-dropdown", ["exports"], functio
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "abUhZ2jg", "block": "{\"symbols\":[\"listItem\"],\"statements\":[[4,\"if\",[[20,[\"showDropdown\"]]],null,{\"statements\":[[0,\"  \"],[6,\"ul\"],[9,\"class\",\"dropdown-menu on-show\"],[9,\"forcescroll\",\"1\"],[7],[0,\"\\n\"],[4,\"unless\",[[20,[\"items\",\"length\"]]],null,{\"statements\":[[0,\"    \"],[6,\"li\"],[7],[0,\"\\n      \"],[6,\"div\"],[9,\"class\",\"service-selection\"],[7],[0,\"\\n        \"],[6,\"h3\"],[7],[1,[25,\"if\",[[20,[\"noSelectionText\"]],[20,[\"noSelectionText\"]],\"No Selection Available\"],null],false],[8],[0,\"\\n        \"],[6,\"div\"],[7],[0,\"...\"],[8],[0,\"\\n      \"],[8],[0,\"\\n    \"],[8],[0,\" \\n\"]],\"parameters\":[]},null],[4,\"each\",[[20,[\"items\"]]],null,{\"statements\":[[0,\"    \"],[6,\"li\"],[3,\"action\",[[19,0,[]],\"chooseItem\",[19,1,[]]]],[7],[0,\"\\n      \"],[6,\"div\"],[9,\"class\",\"service-selection\"],[7],[0,\"\\n        \"],[6,\"div\"],[10,\"class\",[26,[[25,\"if\",[[19,1,[\"img\"]],\"indented-container\",\"\"],null]]]],[7],[0,\"\\n\"],[4,\"if\",[[19,1,[\"img\"]]],null,{\"statements\":[[0,\"          \"],[6,\"img\"],[9,\"class\",\"logo\"],[9,\"width\",\"48\"],[9,\"height\",\"48\"],[10,\"src\",[26,[[19,1,[\"img\"]]]]],[7],[8],[0,\"\\n\"]],\"parameters\":[]},null],[0,\"          \"],[6,\"h3\"],[7],[1,[19,1,[\"title\"]],false],[8],[0,\"\\n          \"],[6,\"div\"],[7],[1,[19,1,[\"description\"]],false],[8],[0,\"\\n        \"],[8],[0,\"\\n      \"],[8],[0,\"\\n    \"],[8],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"  \"],[8],[0,\"\\n\"]],\"parameters\":[]},null]],\"hasEval\":false}", "meta": { "moduleName": "ifttt-ember/templates/components/service-dropdown.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "PMXzecRT", "block": "{\"symbols\":[\"listItem\"],\"statements\":[[4,\"if\",[[20,[\"showDropdown\"]]],null,{\"statements\":[[0,\"  \"],[6,\"ul\"],[9,\"class\",\"dropdown-menu on-show\"],[9,\"forcescroll\",\"1\"],[7],[0,\"\\n\"],[4,\"unless\",[[20,[\"items\",\"length\"]]],null,{\"statements\":[[0,\"    \"],[6,\"li\"],[7],[0,\"\\n      \"],[6,\"div\"],[9,\"class\",\"service-selection\"],[7],[0,\"\\n        \"],[6,\"h3\"],[7],[1,[25,\"if\",[[20,[\"noSelectionText\"]],[20,[\"noSelectionText\"]],\"No Selection Available\"],null],false],[8],[0,\"\\n        \"],[6,\"div\"],[7],[0,\"...\"],[8],[0,\"\\n      \"],[8],[0,\"\\n    \"],[8],[0,\" \\n\"]],\"parameters\":[]},null],[4,\"if\",[[20,[\"items\",\"length\"]]],null,{\"statements\":[[0,\"      \"],[6,\"li\"],[9,\"class\",\"search\"],[7],[0,\"\\n        \"],[1,[25,\"input\",null,[[\"type\",\"class\",\"name\",\"placeholder\",\"value\",\"autocorrect\",\"autocapitalize\",\"spellcheck\",\"autocomplete\"],[\"text\",\"search-field\",\"keyword\",\"Search by keyword\",[20,[\"keyword\"]],\"off\",\"off\",\"false\",\"off\"]]],false],[0,\" \\n      \"],[8],[0,\"\\n\"]],\"parameters\":[]},null],[4,\"each\",[[20,[\"filteredItems\"]]],null,{\"statements\":[[0,\"    \"],[6,\"li\"],[3,\"action\",[[19,0,[]],\"chooseItem\",[19,1,[]]]],[7],[0,\"\\n      \"],[6,\"div\"],[9,\"class\",\"service-selection\"],[7],[0,\"\\n        \"],[6,\"div\"],[10,\"class\",[26,[[25,\"if\",[[19,1,[\"img\"]],\"indented-container\",\"\"],null]]]],[7],[0,\"\\n\"],[4,\"if\",[[19,1,[\"img\"]]],null,{\"statements\":[[0,\"          \"],[6,\"img\"],[9,\"class\",\"logo\"],[9,\"width\",\"48\"],[9,\"height\",\"48\"],[10,\"src\",[26,[[19,1,[\"img\"]]]]],[7],[8],[0,\"\\n\"]],\"parameters\":[]},null],[0,\"          \"],[6,\"h3\"],[7],[1,[19,1,[\"title\"]],false],[8],[0,\"\\n          \"],[6,\"div\"],[7],[1,[19,1,[\"description\"]],false],[8],[0,\"\\n        \"],[8],[0,\"\\n      \"],[8],[0,\"\\n    \"],[8],[0,\"\\n\"]],\"parameters\":[1]},null],[0,\"  \"],[8],[0,\"\\n\"]],\"parameters\":[]},null]],\"hasEval\":false}", "meta": { "moduleName": "ifttt-ember/templates/components/service-dropdown.hbs" } });
 });
 
 
@@ -968,6 +1000,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("ifttt-ember/app")["default"].create({"name":"ifttt-ember","version":"0.0.0+f7f971e3"});
+  require("ifttt-ember/app")["default"].create({"name":"ifttt-ember","version":"0.0.0+f1e769bc"});
 }
 //# sourceMappingURL=ifttt-ember.map
