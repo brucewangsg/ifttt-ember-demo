@@ -63,7 +63,7 @@
               <form class="form-inline" jsclass="continue-choosing-trigger-form">
                 <div class="form-group">
                   <label for="exampleInputName2">Specify Feed URL:</label>
-                  {{input type='text' name='address' placeholder='http://www.wordpress.com/feed' value=model.triggerAttributes.address autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-out=(action "setTriggerAttribute" "address")}} 
+                  {{input type='text' name='address' placeholder='http://www.wordpress.com/feed' value=model.triggerAttributes.address autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-in=(action "setFocusFlag" "address") focus-out=(action "setTriggerAttribute" "address")}} 
                   {{#if model.wrongURL}}
                     <p class="help-block warning">Make sure you have keyed in the correct URL.</p>
                   {{/if}}
@@ -131,7 +131,7 @@
                 <form class="form-inline" jsclass="complete-form">
                   <div class="form-group">
                     <label for="exampleInputName2">Specify your email:</label>
-                    {{input type='text' name='email' placeholder='john.doe@email.com' value=model.actionAttributes.email autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-out=(action "setActionAttribute" "email")}} 
+                    {{input type='text' name='email' placeholder='john.doe@email.com' value=model.actionAttributes.email autocorrect='off' autocapitalize='off' spellcheck='false' autocomplete='off' focus-in=(action "setFocusFlag" "email") focus-out=(action "setActionAttribute" "email")}} 
                     {{#if model.wrongEmail}}
                       <p class="help-block warning">Make sure you have keyed in the correct email.</p>
                     {{/if}}

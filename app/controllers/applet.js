@@ -71,7 +71,7 @@ export default Controller.extend({
     setTriggerAttribute : function (key, value) {
       var model = this.get('model');
       model.set('triggerAttributes.' + key, value);      
-      model.set(key + 'FocusOut', true);
+      model.set(key + 'FocusIn', false);
 
       if (key == 'address') {
         model.verifyAddress();
@@ -80,11 +80,15 @@ export default Controller.extend({
     setActionAttribute : function (key, value) {
       var model = this.get('model');
       model.set('actionAttributes.' + key, value);      
-      model.set(key + 'FocusOut', true);
+      model.set(key + 'FocusIn', false);
 
       if (key == 'email') {
         model.verifyEmail();
       }
+    },
+    setFocusFlag : function () {
+      var model = this.get('model');
+      model.set(key + 'FocusIn', true);
     },
     saveAndSubmit : function () {
       var model = this.get('model');

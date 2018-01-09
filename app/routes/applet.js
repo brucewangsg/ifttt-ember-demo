@@ -45,8 +45,8 @@ export default Route.extend({
   setSelectedActionServiceByCode : function (code, callback) {
     var actionServices = currentState.get("actionServices");
     if (actionServices && actionServices.length == 0) {
-      // can't wait for triggers to get populated
-      mockAPI.get("/api/triggers", { trigger_service_id : this.get('selectedTriggerService').id }, function (newActionServices) {
+      // can't wait for action services to get populated
+      mockAPI.get("/api/actionServices", { trigger_service_id : this.get('selectedTriggerService').id }, function (newActionServices) {
         for (var i = 0, len = newActionServices.length; i < len; i++) {
           if (newActionServices[i].code == code) {
             currentState.set('selectedActionService', newActionServices[i]);
@@ -70,7 +70,7 @@ export default Route.extend({
   setSelectedActionByID : function (itemID) {
     var actions = currentState.get("actions");
     if (actions && actions.length == 0) {
-      // can't wait for triggers to get populated
+      // can't wait for actions to get populated
       mockAPI.get("/api/actions", { action_service_id : this.get('selectedActionService').id }, function (newActions) {
         for (var i = 0, len = newActions.length; i < len; i++) {
           if (newActions[i].id == itemID) {
@@ -102,19 +102,24 @@ export default Route.extend({
         for (var i = 0, len = newTriggerServices.length; i < len; i++) {
           triggerServices.pushObject(newTriggerServices[i]);
         }
+        // load trigger service based on path e.g. /rss
         oThis.setSelectedTriggerServiceByCode(triggerServiceCode);
       });    
     } else {
+      // load trigger service based on path e.g. /rss
       this.setSelectedTriggerServiceByCode(triggerServiceCode);
     }
 
     if (triggerID) {
+      // load trigger based on path e.g. /rss/1
       this.setSelectedTriggerByID(triggerID);
     }
     if (actionServiceCode) {
       var oThis = this;
+      // load action service based on path e.g. /rss/1/email
       this.setSelectedActionServiceByCode(actionServiceCode, function () {
         if (actionID) {
+          // load action service based on path e.g. /rss/1/email/1
           oThis.setSelectedActionByID(actionID);
         }        
       });

@@ -35,11 +35,10 @@ export default EmberObject.extend({
 
   triggerAddressDidChange: observer('triggerAttributes.address', function() {
     var oThis = this;
-    if (!this.get('addressFocusOut')) {
+    if (this.get('addressFocusIn')) {
       // if on input focus, don't verify
       return;
     }
-    this.set('addressFocusOut', false);
 
     this.verifyAddress();
   }),
@@ -67,11 +66,10 @@ export default EmberObject.extend({
 
   triggerAddressDidChange: observer('actionAttributes.email', function() {
     var oThis = this;
-    if (!this.get('emailFocusOut')) {
+    if (this.get('emailFocusIn')) {
       // if on input focus, don't verify
       return;
     }
-    this.set('emailFocusOut', false);
 
     this.verifyAddress();
   }),
@@ -122,10 +120,12 @@ export default EmberObject.extend({
     return this.get('selectedAction') && this.get('selectedAction').id == 1;
   }),
 
+  // hide/show flag on action editing
   selectedActionAndEdit : computed('selectedAction', 'isActionSceneDone', function () {
     return this.get('selectedAction') && !this.get('isActionSceneDone');
   }),
 
+  // hide/show flag on action edit done
   selectedActionAndDone : computed('selectedAction', 'isActionSceneDone', function () {
     return this.get('selectedAction') && this.get('isActionSceneDone');
   }),
@@ -141,6 +141,7 @@ export default EmberObject.extend({
     });
   }),
 
+  // hide/show flag to show submit button
   readyToSubmit : computed('isTriggerSceneDone', 'isActionSceneDone', function () {
     return this.get('isTriggerSceneDone') && this.get('isActionSceneDone');
   }),
