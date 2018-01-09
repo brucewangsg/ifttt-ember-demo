@@ -1,0 +1,219 @@
+html, body {
+  width : 100%;
+  padding : 0px;
+  margin : 0px;
+}
+
+.header-container {
+  text-align : center;
+  padding : 20px 10px;
+}
+
+.main-label {
+  font-size : 2em;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* 
+    
+    Quick and dirty dropdown which supports full screen on mobile devices
+
+*/
+
+.dropdown-menu {
+  overflow: scroll;
+  -webkit-overflow-scrolling : touch; 
+  -webkit-touch-action: auto;
+  touch-action: auto;
+}
+
+.dropdown-menu.on-show {
+  display : block !important;
+  width : 400px;
+  position : absolute;
+  top : 40px;
+  left : 0px;
+  max-height : 300px;
+}
+
+@media (max-width: 480px) { 
+
+  .dropdown-menu.on-show {
+    display : block !important;
+    width : 100%;
+    position : absolute;
+    top : 0px;
+    left : 0px;
+    height: 100%;
+    max-height: 100%;
+    -webkit-box-shadow : none;
+  }
+
+}
+
+
+/*
+
+    Style for list of services inside dropdown
+
+*/
+
+.dropdown-menu .service-selection {
+  text-align: left;
+  padding : 5px 15px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.dropdown-menu li:last-child .service-selection {
+  border-bottom: 0px none;
+}
+
+.dropdown-menu .service-selection h3 {
+  margin : 0px;
+}
+
+.dropdown-menu .service-selection div {
+  width : 100%;
+  white-space : normal;
+  font-size: 14px;
+  -webkit-box-sizing : border-box;
+  box-sizing : border-box;
+}
+
+.clickable-label {
+  cursor: pointer;
+}
+
+/*
+    
+    This should be used with .container, .if-section and .then-section are different colored section.
+
+*/
+
+.if-section {
+  background: #e9fedf;
+  border : 1px solid #367235;
+  -webkit-border-radius : 5px;
+  border-radius: 5px;
+  padding : 15px;
+  margin-bottom: 20px;
+}
+
+.then-section {
+  background: #fedcde;
+  border : 1px solid #ce3c3e;
+  -webkit-border-radius : 5px;
+  border-radius: 5px;
+  padding : 15px;
+  margin-bottom: 20px;
+}
+
+.if-section.finalized {
+  margin-top: 30px;
+}
+
+.if-section.finalized,
+.then-section.finalized {
+  padding-bottom: 40px;
+  max-width : 400px;
+}
+
+@media (max-width: 480px) { 
+  .if-section,
+  .then-section {
+    margin-left : 20px;
+    margin-right: 20px;
+  }
+}
+
+
+/*
+    
+    Customize IF and THEN hero label, 
+    we are going to use position absolute trick to stick the label on the left, while the rest of content will be indented
+
+*/
+
+.if-word {
+  color : #367235;
+}
+
+.then-word {
+  color : #ce3c3e;
+}
+
+.main-label.if-sign {
+  background: #fff;
+  padding : 10px;
+  border : 1px solid #367235;
+  -webkit-border-radius : 5px;
+  border-radius: 5px;
+}
+
+.main-label.then-sign {
+  background: #fff;
+  padding : 10px;
+  border : 1px solid #ce3c3e;
+  -webkit-border-radius : 5px;
+  border-radius: 5px;
+}
+
+/*
+  
+    Indentation for the content below IF/THEN hero label
+
+*/ 
+
+.indented-container {
+  padding-left: 80px;
+  padding-top: 10px;
+  position: relative;
+  padding-bottom: 10px;
+  padding-right: 20px;
+}
+
+.indented-container.level-2 {
+  padding-left: 120px;
+}
+
+.indented-container .if-sign,
+.indented-container .then-sign {
+  position: absolute;
+  top : 0px;
+  left: 0px;
+}
+
+.indented-container .logo {
+  position: absolute;
+  top : 15px;
+  left: 10px;
+}
+
+.indented-container form input {
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
+.help-block.warning {
+  color : #900;
+}
+
+@media (max-width: 1000px) { 
+  .container {
+    margin-left : 20px;
+    margin-right: 20px;
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1000px) { 
+  .container {
+    margin-left : auto;
+    margin-right: auto;
+    max-width: 960px;
+  }
+}
